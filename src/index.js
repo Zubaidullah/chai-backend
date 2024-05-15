@@ -3,10 +3,22 @@
 //  -r dotenv/config --experimental-json-modules (--experimental-specifier-resolution=node)
 import dotenv from "dotenv";
 import connectToDatabase from "./db/indexDB.js";
+import app from "./app.js";
 
 dotenv.config({ path: "./env" });
 
-connectToDatabase();
+connectToDatabase()
+// this will give us a promise
+.then(() => {
+  app.listen(process.env.PORT || 8000, () => {
+    console.log(`Express is running on port ${process.env.PORT || 8000}`);
+  });
+})
+.catch((err) => {
+  console.log("Error connecting to MongoDB");
+  console.error(err);
+  process.exit(1);
+});
 
 // everything in this file is just for testing purposes
 // import mongoose from "mongoose";
